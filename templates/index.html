@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marriage Hall Booking</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="form-container">
+        <!-- Flash messages for feedback -->
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <div class="flash-message">
+              {% for message in messages %}
+                <p>{{ message }}</p>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        <!-- Booking form -->
+        <h2>Marriage Hall Booking</h2>
+        <form action="/submit" method="post" class="booking-form">
+            <label for="first_name">First Name:</label>
+            <input type="text" id="first_name" name="first_name" placeholder="Enter first name" required>
+
+            <label for="last_name">Last Name:</label>
+            <input type="text" id="last_name" name="last_name" placeholder="Enter last name" required>
+
+            <label for="hall_name">Select Hall:</label>
+            <select id="hall_name" name="hall_name" required>
+                <option value="Hall 1">Hall 1</option>
+                <option value="Hall 2">Hall 2</option>
+            </select>
+
+            <label for="booking_date">Booking Date:</label>
+            <input type="date" id="booking_date" name="booking_date" required>
+
+            <label for="booking_time">Booking Time:</label>
+            <select id="booking_time" name="booking_time" required>
+                <option value="First Half">First Half</option>
+                <option value="Second Half">Second Half</option>
+                <option value="Full Day">Full Day</option>
+            </select>
+
+            <label for="num_guests">Number of Guests:</label>
+            <input type="number" id="num_guests" name="num_guests" placeholder="Enter number of guests" required>
+
+            <input type="submit" value="Book Hall">
+        </form>
+
+        <!-- Form to retrieve booking details -->
+        <h2 style="margin-top: 40px;">Retrieve Booking Details</h2>
+        <form action="/retrieve" method="get" class="retrieve-form">
+            <label for="full_name_lookup">First and Last Name:</label>
+            <input type="text" id="full_name_lookup" name="full_name" placeholder="Enter full name" required>
+
+            <input type="submit" value="Retrieve">
+        </form>
+
+        <!-- Links to view all bookings and calendar view -->
+        <a href="{{ url_for('view_bookings') }}" class="view-bookings-link">View All Bookings</a>
+        <a href="{{ url_for('calendar_view') }}" class="view-bookings-link">View Calendar</a>
+    </div>
+</body>
+</html>

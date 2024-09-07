@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar View</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body class="calendar-body">
+    <div id="calendarContainer">
+        <div class="calendar-header">
+            <button onclick="navigateToToday()">Today</button>
+            <button onclick="previousMonth()">&#9664;</button>
+            <span id="currentMonth">September 2024</span>
+            <button onclick="nextMonth()">&#9654;</button>
+            <select id="viewMode">
+                <option value="month">Month</option>
+            </select>
+        </div>
+
+        <table id="calendarTable">
+            <thead>
+                <tr id="calendarDates">
+                    <th>Hall</th> <!-- Heading for hall column -->
+                    {% for day in range(1, 31) %}
+                    <th>{{ day }} Sep</th> <!-- Dynamically create day columns -->
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="hall-row">
+                    <td class="hall-cell">Hall 1</td> <!-- Hall 1 row -->
+                    {% for day in range(1, 31) %}
+                    <td class="calendar-cell {% if '2024-09-' ~ day in bookings['Hall 1'] %}booked{% endif %}"></td>
+                    {% endfor %}
+                </tr>
+                <tr class="hall-row">
+                    <td class="hall-cell">Hall 2</td> <!-- Hall 2 row -->
+                    {% for day in range(1, 31) %}
+                    <td class="calendar-cell {% if '2024-09-' ~ day in bookings['Hall 2'] %}booked{% endif %}"></td>
+                    {% endfor %}
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function navigateToToday() {
+            // Logic to navigate to today's date
+        }
+
+        function previousMonth() {
+            // Logic to go to the previous month
+        }
+
+        function nextMonth() {
+            // Logic to go to the next month
+        }
+    </script>
+</body>
+</html>
