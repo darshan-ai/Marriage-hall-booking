@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marriage Hall Booking</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+</head>
+<body>
+    <div class="form-container">
+        <h1>Marriage Hall Booking</h1>
+        <a href="{{ url_for('book_hall') }}" class="view-button">Book Hall</a>
+
+        <!-- Wrapper for the buttons in one row with spacing -->
+        <div class="horizontal-buttons">
+            <a href="{{ url_for('retrieve_booking') }}" class="view-button button-item">Retrieve Booking</a>
+            <a href="{{ url_for('view_bookings') }}" class="view-button button-item">View All Bookings</a>
+            <a href="{{ url_for('calendar_view') }}" class="view-button button-item">View Calendar</a>
+        </div>
+    </div>
+</body>
+</html>

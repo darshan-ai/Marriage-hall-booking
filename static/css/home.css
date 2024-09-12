@@ -1,0 +1,78 @@
+/* General Body Styling */
+body {
+    font-family: 'Verdana', sans-serif;
+    background-image: url('/static/images/background.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: #fff;
+    text-align: center; /* Center content horizontally */
+}
+
+/* Center the form container horizontally and vertically */
+.form-container {
+    background-color: rgba(0, 0, 0, 0.5); /* Adjusted black background opacity */
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    padding: 40px;
+    max-width: 800px;
+    width: 100%;
+    color: #ddd;
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Styling for the main buttons */
+.view-button, .retrieve-button, .calendar-button {
+    width: 100%;
+    padding: 14px;
+    background-color: #B29875; /* Updated to a more neutral blue tone */
+    color: white;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.view-button:hover, .retrieve-button:hover, .calendar-button:hover {
+    background-color: #B29875; /* Darker blue on hover */
+}
+
+/* Styling for buttons below the Book Hall button with space between them */
+.horizontal-buttons {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.horizontal-buttons .button-item {
+    width: 32%; /* Adjusted for space between buttons */
+    margin: 0 5px; /* Small space between buttons */
+}
+
+/* Book Hall button styling */
+.view-button {
+    width: calc(100% - 10px); /* Make it match the width of the three buttons below */
+    margin-bottom: 20px;
+}
+
+/* Styling for the headings */
+h1 {
+    font-size: 36px;
+    margin-bottom: 20px;
+    color: white;
+}

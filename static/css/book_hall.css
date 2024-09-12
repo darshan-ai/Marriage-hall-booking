@@ -1,0 +1,89 @@
+/* General Page Styling */
+body {
+    font-family: 'Verdana', sans-serif;
+    background-image: url('/static/images/background.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: #fff;
+    text-align: center;
+}
+
+/* Container for form */
+.page-container {
+    background-color: rgba(0, 0, 0, 0.7); /* Black background with transparency */
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    max-width: 600px;
+    width: 100%;
+    margin: 20px auto;
+}
+
+/* Heading Styling */
+h2 {
+    margin-bottom: 20px;
+    color: white;
+}
+
+/* Label Styling */
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: white;
+}
+
+/* Input and Select Field Styling */
+input[type="text"],
+input[type="date"],
+input[type="number"],
+select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    color: #333;
+}
+
+/* Submit Button Styling */
+input[type="submit"] {
+    padding: 15px;
+    background-color: #B29875;
+    color: white;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+}
+
+input[type="submit"]:hover {
+    background-color: #B29875;
+}
+
+/* Back Button Styling */
+.back-button {
+    margin-top: 20px;
+    padding: 14px;
+    background-color: #B29875;
+    color: white;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+}
+
+.back-button:hover {
+    background-color: #B29875;
+}

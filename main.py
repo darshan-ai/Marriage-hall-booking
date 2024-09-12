@@ -5,76 +5,24 @@ app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
 @app.route('/')
-def index():
-    try:
-        full_name = request.args.get('full_name')
-        booking_data = None
-        if full_name:
-            booking_data = db.get(full_name)
-        return render_template('index.html', booking_data=booking_data)
-    except Exception as e:
-        print(f"Error in index route: {e}")
-        flash(f"An error occurred: {e}")
-        return render_template('index.html')
+def home():
+    # Rendering the home page
+    return render_template('home.html')
 
-@app.route('/submit', methods=['POST'])
-def submit():
-    try:
-        first_name = request.form['first_name']
-        last_name = request.form['last_name']
-        full_name = f"{first_name} {last_name}"
-        hall_name = request.form['hall_name']
-        booking_date = request.form['booking_date']
-        booking_time = request.form['booking_time']
-        num_guests = request.form['num_guests']
+@app.route('/book_hall', methods=['GET', 'POST'])
+def book_hall():
+    if request.method == 'POST':
+        try:
+            # Collect booking details from the form
+            first_name = request.form['first_name']
+            last_name = request.form['last_name']
+            full_name = f"{first_name} {last_name}"
+            hall_name = request.form['hall_name']
+            booking_date = request.form['booking_date']
+            booking_time = request.form['booking_time']
+            num_guests = request.form['num_guests']
 
-        db[full_name] = {
-            'first_name': first_name,
-            'last_name': last_name,
-            'hall_name': hall_name,
-            'booking_date': booking_date,
-            'booking_time': booking_time,
-            'num_guests': num_guests
-        }
-
-        flash(f"Booking for {full_name} on {booking_date} at {hall_name} has been successfully saved.")
-    except Exception as e:
-        flash(f"An error occurred: {e}")
-
-    return redirect(url_for('index'))
-
-@app.route('/retrieve', methods=['GET'])
-def retrieve():
-    try:
-        full_name = request.args.get('full_name')
-        return redirect(url_for('index', full_name=full_name))
-    except Exception as e:
-        flash(f"An error occurred: {e}")
-        return redirect(url_for('index'))
-
-@app.route('/delete/<full_name>', methods=['POST'])
-def delete(full_name):
-    try:
-        if full_name in db:
-            del db[full_name]
-            flash(f"Booking for {full_name} has been successfully deleted.")
-        else:
-            flash(f"Booking for {full_name} not found.")
-    except Exception as e:
-        flash(f"An error occurred: {e}")
-    return redirect(url_for('index'))
-
-@app.route('/modify/<full_name>', methods=['POST'])
-def modify(full_name):
-    try:
-        first_name = request.form['first_name']
-        last_name = request.form['last_name']
-        hall_name = request.form['hall_name']
-        booking_date = request.form['booking_date']
-        booking_time = request.form['booking_time']
-        num_guests = request.form['num_guests']
-
-        if full_name in db:
+            # Save booking to database
             db[full_name] = {
                 'first_name': first_name,
                 'last_name': last_name,
@@ -83,36 +31,52 @@ def modify(full_name):
                 'booking_time': booking_time,
                 'num_guests': num_guests
             }
-            flash(f"Booking for {full_name} has been successfully modified.")
-        else:
-            flash(f"Booking for {full_name} not found.")
-    except Exception as e:
-        flash(f"An error occurred: {e}")
-    return redirect(url_for('index', full_name=full_name))
+
+            # Flash success message and redirect to home page
+            flash(f"Booking for {full_name} on {booking_date} at {hall_name} has been successfully saved.")
+            return redirect(url_for('home'))
+        except Exception as e:
+            # Handle errors and show an error message
+            flash(f"An error occurred: {e}")
+            return redirect(url_for('book_hall'))
+    # Render the book hall page
+    return render_template('book_hall.html')
+
+@app.route('/retrieve_booking', methods=['GET', 'POST'])
+def retrieve_booking():
+    booking_data = None
+    if request.method == 'POST':
+        # Retrieve booking based on full name
+        full_name = request.form['full_name']
+        booking_data = db.get(full_name)
+        if not booking_data:
+            # Flash error if booking not found
+            flash(f"No booking found for {full_name}.")
+    # Render the retrieve booking page and pass any found booking data
+    return render_template('retrieve_booking.html', booking_data=booking_data)
 
 @app.route('/view_bookings')
 def view_bookings():
-    try:
-        bookings = {key: db[key] for key in db.keys()}
-        return render_template('view_bookings.html', bookings=bookings)
-    except Exception as e:
-        flash(f"An error occurred: {e}")
-        return redirect(url_for('index'))
+    # Fetch all bookings from the database
+    bookings = {key: db[key] for key in db.keys()}
+    # Render the view bookings page and pass the booking data
+    return render_template('view_bookings.html', bookings=bookings)
 
 @app.route('/calendar_view')
 def calendar_view():
-    try:
-        bookings = {}
-        for full_name, booking in db.items():
-            hall = booking['hall_name']
-            if hall not in bookings:
-                bookings[hall] = []
-            bookings[hall].append(booking['booking_date'])
+    bookings = {}
+    # Populate bookings per hall for calendar view
+    for full_name, booking in db.items():
+        hall = booking['hall_name']
+        booking_date = booking['booking_date']
 
-        return render_template('calendar_view.html', bookings=bookings)
-    except Exception as e:
-        flash(f"An error occurred: {e}")
-        return redirect(url_for('index'))
+        # Group bookings by hall name
+        if hall not in bookings:
+            bookings[hall] = []
+        bookings[hall].append(booking_date)
+
+    # Render the calendar view and pass the booking data
+    return render_template('calendar_view.html', bookings=bookings)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080)

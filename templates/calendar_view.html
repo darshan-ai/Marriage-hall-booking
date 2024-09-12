@@ -1,61 +1,151 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Calendar View</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/calendar_view.css') }}">
 </head>
-<body class="calendar-body">
-    <div id="calendarContainer">
+<body>
+    <div class="container">
         <div class="calendar-header">
             <button onclick="navigateToToday()">Today</button>
-            <button onclick="previousMonth()">&#9664;</button>
-            <span id="currentMonth">September 2024</span>
-            <button onclick="nextMonth()">&#9654;</button>
-            <select id="viewMode">
+            <button onclick="previous()">&#9664;</button>
+            <span id="currentPeriod"></span>
+            <button onclick="next()">&#9654;</button>
+            <select id="viewMode" onchange="changeViewMode()">
                 <option value="month">Month</option>
+                <option value="week">Week</option>
             </select>
         </div>
 
         <table id="calendarTable">
             <thead>
                 <tr id="calendarDates">
-                    <th>Hall</th> <!-- Heading for hall column -->
-                    {% for day in range(1, 31) %}
-                    <th>{{ day }} Sep</th> <!-- Dynamically create day columns -->
-                    {% endfor %}
+                    <th>Hall</th>
                 </tr>
             </thead>
             <tbody>
                 <tr class="hall-row">
-                    <td class="hall-cell">Hall 1</td> <!-- Hall 1 row -->
-                    {% for day in range(1, 31) %}
-                    <td class="calendar-cell {% if '2024-09-' ~ day in bookings['Hall 1'] %}booked{% endif %}"></td>
-                    {% endfor %}
+                    <td class="hall-cell">Hall 1</td>
                 </tr>
                 <tr class="hall-row">
-                    <td class="hall-cell">Hall 2</td> <!-- Hall 2 row -->
-                    {% for day in range(1, 31) %}
-                    <td class="calendar-cell {% if '2024-09-' ~ day in bookings['Hall 2'] %}booked{% endif %}"></td>
-                    {% endfor %}
+                    <td class="hall-cell">Hall 2</td>
                 </tr>
             </tbody>
         </table>
+        <a href="/" class="back-button">Back to Home</a>
     </div>
 
     <script>
+        let currentMonth = new Date().getMonth();
+        let currentYear = new Date().getFullYear();
+        let currentWeek = new Date().getDate() - new Date().getDay(); // Starting from current week
+        let currentViewMode = 'month'; // Default is month view
+        const bookings = {{ bookings|tojson }};
+
+        function populateCalendar() {
+            if (currentViewMode === 'month') {
+                populateMonth(currentMonth, currentYear);
+            } else {
+                populateWeek(currentWeek, currentYear);
+            }
+        }
+
+        function populateMonth(month, year) {
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            document.getElementById('currentPeriod').textContent = `${monthNames[month]} ${year}`;
+
+            const calendarDatesRow = document.getElementById('calendarDates');
+            const hall1Row = document.querySelector('.hall-row:nth-child(1)');
+            const hall2Row = document.querySelector('.hall-row:nth-child(2)');
+
+            calendarDatesRow.innerHTML = '<th>Hall</th>';
+            hall1Row.innerHTML = '<td class="hall-cell">Hall 1</td>';
+            hall2Row.innerHTML = '<td class="hall-cell">Hall 2</td>';
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayStr = day < 10 ? `0${day}` : day;
+                const fullDate = `${year}-${(month + 1).toString().padStart(2, '0')}-${dayStr}`;
+                calendarDatesRow.innerHTML += `<th>${day}</th>`;
+
+                const hall1Class = bookings['Hall 1'] && bookings['Hall 1'].includes(fullDate) ? 'booked' : '';
+                const hall2Class = bookings['Hall 2'] && bookings['Hall 2'].includes(fullDate) ? 'booked' : '';
+
+                hall1Row.innerHTML += `<td class="calendar-cell ${hall1Class}"></td>`;
+                hall2Row.innerHTML += `<td class="calendar-cell ${hall2Class}"></td>`;
+            }
+        }
+
+        function populateWeek(startDate, year) {
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            const firstDayOfWeek = new Date(year, currentMonth, startDate);
+            document.getElementById('currentPeriod').textContent = `Week of ${firstDayOfWeek.toDateString()}`;
+
+            const calendarDatesRow = document.getElementById('calendarDates');
+            const hall1Row = document.querySelector('.hall-row:nth-child(1)');
+            const hall2Row = document.querySelector('.hall-row:nth-child(2)');
+
+            calendarDatesRow.innerHTML = '<th>Hall</th>';
+            hall1Row.innerHTML = '<td class="hall-cell">Hall 1</td>';
+            hall2Row.innerHTML = '<td class="hall-cell">Hall 2</td>';
+
+            for (let i = 0; i < 7; i++) {
+                const currentDay = new Date(year, currentMonth, startDate + i);
+                const dayStr = currentDay.getDate() < 10 ? `0${currentDay.getDate()}` : currentDay.getDate();
+                const fullDate = `${currentDay.getFullYear()}-${(currentDay.getMonth() + 1).toString().padStart(2, '0')}-${dayStr}`;
+                calendarDatesRow.innerHTML += `<th>${currentDay.toDateString()}</th>`;
+
+                const hall1Class = bookings['Hall 1'] && bookings['Hall 1'].includes(fullDate) ? 'booked' : '';
+                const hall2Class = bookings['Hall 2'] && bookings['Hall 2'].includes(fullDate) ? 'booked' : '';
+
+                hall1Row.innerHTML += `<td class="calendar-cell ${hall1Class}"></td>`;
+                hall2Row.innerHTML += `<td class="calendar-cell ${hall2Class}"></td>`;
+            }
+        }
+
         function navigateToToday() {
-            // Logic to navigate to today's date
+            currentMonth = new Date().getMonth();
+            currentYear = new Date().getFullYear();
+            currentWeek = new Date().getDate() - new Date().getDay();
+            populateCalendar();
         }
 
-        function previousMonth() {
-            // Logic to go to the previous month
+        function previous() {
+            if (currentViewMode === 'month') {
+                if (currentMonth === 0) {
+                    currentMonth = 11;
+                    currentYear--;
+                } else {
+                    currentMonth--;
+                }
+            } else {
+                currentWeek -= 7;
+            }
+            populateCalendar();
         }
 
-        function nextMonth() {
-            // Logic to go to the next month
+        function next() {
+            if (currentViewMode === 'month') {
+                if (currentMonth === 11) {
+                    currentMonth = 0;
+                    currentYear++;
+                } else {
+                    currentMonth++;
+                }
+            } else {
+                currentWeek += 7;
+            }
+            populateCalendar();
         }
+
+        function changeViewMode() {
+            currentViewMode = document.getElementById('viewMode').value;
+            populateCalendar();
+        }
+
+        populateCalendar();
     </script>
 </body>
 </html>

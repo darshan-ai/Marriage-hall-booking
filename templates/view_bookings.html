@@ -3,35 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View All Bookings</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>All Bookings</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/view_bookings.css') }}">
 </head>
 <body>
-    <div class="form-container">
+    <div class="container">
         <h2>All Bookings</h2>
         {% if bookings %}
             <table>
-                <tr>
-                    <th>Name</th>
-                    <th>Hall Name</th>
-                    <th>Date</th>
-                    <th>Time</th>
-                    <th>Number of Guests</th>
-                </tr>
-                {% for full_name, booking in bookings.items() %}
-                <tr>
-                    <td>{{ booking['first_name'] }} {{ booking['last_name'] }}</td>
-                    <td>{{ booking['hall_name'] }}</td>
-                    <td>{{ booking['booking_date'] }}</td>
-                    <td>{{ booking['booking_time'] }}</td>
-                    <td>{{ booking['num_guests'] }}</td>
-                </tr>
-                {% endfor %}
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Hall Name</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Number of Guests</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for full_name, booking in bookings.items() %}
+                    <tr>
+                        <td>{{ booking['first_name'] }} {{ booking['last_name'] }}</td>
+                        <td>{{ booking['hall_name'] }}</td>
+                        <td>{{ booking['booking_date'] }}</td>
+                        <td>{{ booking['booking_time'] }}</td>
+                        <td>{{ booking['num_guests'] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
             </table>
         {% else %}
             <p>No bookings found.</p>
         {% endif %}
-        <a href="{{ url_for('index') }}">Go Back</a>
+        <a href="{{ url_for('home') }}" class="button">Go Back</a>
     </div>
 </body>
 </html>
