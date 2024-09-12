@@ -5,9 +5,9 @@ app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
 @app.route('/')
-def home():
-    # Rendering the home page
-    return render_template('home.html')
+def index():
+    # Rendering the index page (formerly home)
+    return render_template('index.html')
 
 @app.route('/book_hall', methods=['GET', 'POST'])
 def book_hall():
@@ -32,9 +32,9 @@ def book_hall():
                 'num_guests': num_guests
             }
 
-            # Flash success message and redirect to home page
+            # Flash success message and redirect to index page
             flash(f"Booking for {full_name} on {booking_date} at {hall_name} has been successfully saved.")
-            return redirect(url_for('home'))
+            return redirect(url_for('index'))
         except Exception as e:
             # Handle errors and show an error message
             flash(f"An error occurred: {e}")
