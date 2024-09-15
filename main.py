@@ -42,16 +42,18 @@ def book_hall():
     # Render the book hall page
     return render_template('book_hall.html')
 
-@app.route('/retrieve_booking', methods=['GET', 'POST'])
+@app.route('/retrieve_booking', methods=['GET'])
 def retrieve_booking():
+    full_name = request.args.get('full_name')
     booking_data = None
-    if request.method == 'POST':
+    if full_name:
         # Retrieve booking based on full name
-        full_name = request.form['full_name']
         booking_data = db.get(full_name)
         if not booking_data:
             # Flash error if booking not found
             flash(f"No booking found for {full_name}.")
+        else:
+            flash(f"Booking found for {full_name}.")
     # Render the retrieve booking page and pass any found booking data
     return render_template('retrieve_booking.html', booking_data=booking_data)
 

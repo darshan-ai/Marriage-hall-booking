@@ -79,7 +79,6 @@
         }
 
         function populateWeek(startDate, year) {
-            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
             const firstDayOfWeek = new Date(year, currentMonth, startDate);
             document.getElementById('currentPeriod').textContent = `Week of ${firstDayOfWeek.toDateString()}`;
 

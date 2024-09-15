@@ -9,11 +9,21 @@
 <body>
     <div class="container">
         <h1>Retrieve Booking</h1>
-        <form action="/retrieve" method="get">
+        <form action="/retrieve_booking" method="get">
             <label for="full_name">First and Last Name:</label>
             <input type="text" id="full_name" name="full_name" required>
             <input type="submit" value="Retrieve">
         </form>
+
+        {% if booking_data %}
+            <h2>Booking Details:</h2>
+            <p><strong>Name:</strong> {{ booking_data['first_name'] }} {{ booking_data['last_name'] }}</p>
+            <p><strong>Hall Name:</strong> {{ booking_data['hall_name'] }}</p>
+            <p><strong>Date:</strong> {{ booking_data['booking_date'] }}</p>
+            <p><strong>Time:</strong> {{ booking_data['booking_time'] }}</p>
+            <p><strong>Number of Guests:</strong> {{ booking_data['num_guests'] }}</p>
+        {% endif %}
+
         <a href="/" class="button">Back to Home</a>
     </div>
 </body>
